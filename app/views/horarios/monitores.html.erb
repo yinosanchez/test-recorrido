@@ -1,0 +1,26 @@
+<table class="horario table table-bordered">
+    <tr>
+        <th></th>
+        <% (0..6).each do |day| %>
+            <th><%= (@week_start + day.days).strftime('%d/%m/%Y') %></th>
+        <% end %>
+    </tr>
+<% (@horas[0]..@horas[1]).each do |hour| %>
+    <tr>
+        <th>
+            <%= '%02d:00' % hour %>
+        </th>
+        <% (0..6).each do |day| %>
+            <td>
+                <% if @horarios[(@week_start + day.days).to_s+'_'+hour.to_s] %>
+                    <% if !@monitores[@horarios[(@week_start + day.days).to_s+'_'+hour.to_s]].nil? %>
+                        <span><%= @monitores[@horarios[(@week_start + day.days).to_s+'_'+hour.to_s]] %></span>
+                    <% else %>
+                        <span><i class="bi bi-exclamation-triangle"></i></span>
+                    <% end %>
+                <% end %>
+            </td>
+        <% end %>
+    </tr>
+<% end %>
+</table>

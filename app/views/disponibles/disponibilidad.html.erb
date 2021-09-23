@@ -1,0 +1,27 @@
+<%= form_with url: "/disponibles/update_disponibilidad", method: :post do |form| %>
+  <table class="horario table table-bordered">
+    <tr>
+      <th></th>
+      <% (0..6).each do |day| %>
+        <th><%= (@week_start + day.days).strftime('%d/%m/%Y') %></th>
+      <% end %>
+    </tr>
+  <% (@hour_range[0]..@hour_range[1]).each do |hour| %>
+    <tr>
+      <th>
+        <%= '%02d:00' % hour %>
+      </th>
+      <% (0..6).each do |day| %>
+        <td>
+          <% if @horarios[(@week_start + day.days).to_s+'_'+hour.to_s] %>
+            <%= form.check_box @horarios[(@week_start + day.days).to_s+'_'+hour.to_s], {checked: @disponibles[@horarios[(@week_start + day.days).to_s+'_'+hour.to_s]]} %>
+          <% end %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+  </table>
+  <%= form.hidden_field :week_start, value: @week_start %>
+  <%= form.hidden_field :servicio_id, value: @servicio_id %>
+  <%= form.submit "Update", class: "btn btn-outline-primary" %>
+<% end %>

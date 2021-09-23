@@ -1,0 +1,69 @@
+<div id="header">
+  <%= button_to "logout", destroy_servicio_session_path, method: :delete, class: "logout btn btn-outline-dark"  %>
+</div>
+<div id="weeks_app">
+  <select id="week_select" v-model="week" class="form-select form-select-lg mb-3">
+  <% @weeks.each do |week| %>
+    <option value="<%= week[0] %>"><%= week[1] %></option>
+  <% end %>
+  </select>
+  <div class="container" id="action_buttons" v-show="botones_visibles">
+    <div class="row align-items-center">
+      <div class="col align-items-center">
+          <button class='btn btn-lg btn-primary' v-on:click="getHorario">Editar Horario</button>
+      </div>
+      <div class="col align-items-center">
+          <button class='btn btn-lg btn-info' v-on:click="copyPastWeek">Copiar Semana Pasada</button>
+      </div>
+      <div class="col align-items-center">
+          <button class='btn btn-lg btn-warning' v-on:click="getMonitores">Revisar Monitores</button>
+      </div>
+    </div>
+  </div>
+  <div id="horario" v-html="horario" class="horario_form" v-show="horario_visible">
+    {{ horario }}
+  </div>
+</div>
+<script>
+  var weeks_app = new Vue({
+      el: '#weeks_app',
+      data: {
+        horario: '',
+        week: '',
+        botones_visibles: false,
+        horario_visible: false
+      },
+      watch: {
+        week: function() {
+          this.botones_visibles = true
+          this.horario_visible = false
+        }
+      },
+      methods: {
+        getHorario: function() {
+          var wa = this
+          axios.get('http://localhost:3000/horarios/week_form/'+this.week)
+            .then(function(response) {
+              wa.horario_visible = true
+              wa.horario = response.data
+            })
+        },
+        getMonitores: function() {
+          var wa = this
+          axios.get('http://localhost:3000/horarios/monitores/'+this.week)
+            .then(function(response) {
+              wa.horario_visible = true
+              wa.horario = response.data
+            })
+        },
+        copyPastWeek: function() {
+          var wa = this
+          axios.post('http://localhost:3000/horarios/copy_past_week/', {chosen_week: this.week, authenticity_token: document.querySelector('[name="csrf-token"]').content })
+            .then(function(response) {
+              wa.horario_visible = true
+              wa.horario = response.data
+            })
+        }
+      }
+    })
+</script>

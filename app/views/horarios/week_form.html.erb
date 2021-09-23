@@ -1,0 +1,24 @@
+<%= form_with url: "/horarios/update_week", method: :post do |form| %>
+    <table class="horario table table-bordered">
+        <tr>
+            <th></th>
+            <% (0..6).each do |day| %>
+                <th><%= (@week_start + day.days).strftime('%d/%m/%Y') %></th>
+            <% end %>
+        </tr>
+    <% (0..23).each do |hour| %>
+        <tr>
+            <th>
+                <%= '%02d:00' % hour %>
+            </th>
+            <% (0..6).each do |day| %>
+                <td>
+                    <%= form.check_box day.to_s+'_'+hour.to_s, {checked: @horarios[(@week_start + day.days).to_s+'_'+hour.to_s]} %>
+                </td>
+            <% end %>
+        </tr>
+    <% end %>
+    </table>
+    <%= form.hidden_field :week_start, value: @week_start %>
+    <%= form.submit "Update", class: "btn btn-outline-primary" %>
+<% end %>

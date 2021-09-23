@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  servicio: one
+  fecha: 2021-09-17
+  hora: 
+
+two:
+  servicio: two
+  fecha: 2021-09-17
+  hora: 

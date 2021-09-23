@@ -1,0 +1,57 @@
+<div id="header">
+  <%= button_to "logout", destroy_usuario_session_path, method: :delete, class: "logout btn btn-outline-dark"  %>
+</div>
+<div id="disponibles_app">
+  <div id="servicio">
+    <select id="servicio_select" v-model="servicio" class="form-select form-select-lg mb-3">
+    <% @servicios.each do |servicio| %>
+      <option value="<%= servicio[0] %>"><%= servicio[1] %></option>
+    <% end %>
+    </select>
+  </div>
+  <div id="week" v-show="week_form_loaded">
+    <select id="week_select" v-model="week" v-html="week_form" class="form-select form-select-lg mb-3">
+      {{ week_form }}
+    </select>
+  </div>
+  <div id="horario" v-html="horario">
+    {{ horario }}
+  </div>
+</div>
+<script>
+  var disponibles_app = new Vue({
+      el: '#disponibles_app',
+      data: {
+        servicio: '',
+        horario: '',
+        week_form: '',
+        week_form_loaded: false,
+        week: ''
+      },
+      watch: {
+        servicio: function(chosen_servicio) {
+          this.getWeeks()
+          this.week_form_loaded = true
+        },
+        week: function(chosen_week) {
+          this.getDisponibilidad()
+        }
+      },
+      methods: {
+        getWeeks: function() {
+          var da = this
+          axios.get('http://localhost:3000/disponibles/week_form/'+this.servicio)
+            .then(function(response) {
+              da.week_form = response.data
+            })
+        },
+        getDisponibilidad: function() {
+          var da = this
+          axios.get('http://localhost:3000/disponibles/disponibilidad/'+this.servicio+'/'+this.week)
+            .then(function(response) {
+              da.horario = response.data
+            })
+        }
+      }
+    })
+</script>
