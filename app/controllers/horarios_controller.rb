@@ -54,44 +54,4 @@ class HorariosController < ApplicationController
         @horarios = Horario.get_week(current_servicio.id, @week_start)
         render :week_form
     end
-
-    def monitores
-        year = params[:chosen_week].split('_')[0].to_i
-        week = params[:chosen_week].split('_')[1].to_i
-        @week_start = Date.commercial( year, week, 1 )
-        @horarios = Horario.get_week_ids(current_servicio.id, @week_start)
-        @horas = Horario.get_week_hour_range(current_servicio.id, @week_start)
-        disponibles = Disponible.get_monitores_week(current_servicio.id, @week_start)
-        @monitores = {}
-        horas = {}
-        conflictos = []
-        @horarios.values.each do |horario_id|
-            if(disponibles[horario_id].nil?)
-                @monitores[horario_id] = nil
-            elsif(disponibles[horario_id].count == 1)
-                usuario_id = disponibles[horario_id].first.usuario_id
-                @monitores[horario_id] = disponibles[horario_id].first.usuario.name
-                horas[usuario_id] = horas[usuario_id] ? horas[usuario_id]+1 : 1
-            else
-                conflictos.push(horario_id)
-            end
-        end
-        conflictos.each do |horario_id|
-            chosen_monitor = solve_conflict(horas, disponibles[horario_id])
-            usuario_id = chosen_monitor.usuario_id
-            @monitores[horario_id] = chosen_monitor.usuario.name
-            horas[usuario_id] = horas[usuario_id] ? horas[usuario_id]+1 : 1
-        end
-    end
-
-    private
-    def solve_conflict(horas, monitores)
-        chosen_monitor = monitores.first
-        monitores.each do |monitor|
-            if(horas[monitor.usuario_id] < horas[chosen_monitor.usuario_id])
-                chosen_monitor = monitor
-            end
-        end
-        return chosen_monitor
-    end
 end

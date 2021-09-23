@@ -1,24 +1,26 @@
-# README
+# Monitoring as a Service
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Instalacion
 
-Things you may want to cover:
+Para hacer funcionar este test. Se recomienda partir por correr las migraciones y el seed.
 
-* Ruby version
+'''
+rails db:migrate
+rails db:seed
+'''
 
-* System dependencies
+Esto creara: 
+- El servicio con el mail: recorrido@recorrido.cl y la contraseña 'password'.
+- Tres usuarios:
+	- alberto@recorrido.cl con contraseña 'password'
+	- benito@recorrido.cl con contraseña 'password'
+	- carola@recorrido.cl con contraseña 'password'
+- La primera semana de horarios. Ninguno de los usuarios ha marcado su disponibilidad.
 
-* Configuration
+### Servicio
 
-* Database creation
+El usuario de servicio parte con una semana ya rellenada para decir cuando necesita monitoreo. Puede copiar los horarios necesario a otra semana para no tener que rellenar todas las casillas de nuevo. 
 
-* Database initialization
+## Monitores
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+El monitor puede elegir el servicio y posteriormente la semana a vislumbrar. Luego puede editar su disponibilidad.

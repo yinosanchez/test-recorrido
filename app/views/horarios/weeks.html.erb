@@ -15,9 +15,6 @@
       <div class="col align-items-center">
           <button class='btn btn-lg btn-info' v-on:click="copyPastWeek">Copiar Semana Pasada</button>
       </div>
-      <div class="col align-items-center">
-          <button class='btn btn-lg btn-warning' v-on:click="getMonitores">Revisar Monitores</button>
-      </div>
     </div>
   </div>
   <div id="horario" v-html="horario" class="horario_form" v-show="horario_visible">
@@ -43,14 +40,6 @@
         getHorario: function() {
           var wa = this
           axios.get('http://localhost:3000/horarios/week_form/'+this.week)
-            .then(function(response) {
-              wa.horario_visible = true
-              wa.horario = response.data
-            })
-        },
-        getMonitores: function() {
-          var wa = this
-          axios.get('http://localhost:3000/horarios/monitores/'+this.week)
             .then(function(response) {
               wa.horario_visible = true
               wa.horario = response.data

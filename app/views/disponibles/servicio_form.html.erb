@@ -9,13 +9,21 @@
     <% end %>
     </select>
   </div>
-  <div id="week" v-show="week_form_loaded">
+  <div id="week" v-show="show_week_form">
     <select id="week_select" v-model="week" v-html="week_form" class="form-select form-select-lg mb-3">
       {{ week_form }}
     </select>
   </div>
-  <div id="horario" v-html="horario">
+  <div id="horario" v-html="horario" v-show="show_monitores">
     {{ horario }}
+  </div>
+  <div class="row align-items-center" v-show="show_monitores">
+    <div class="col align-items-center" v-show="viewing_monitores">
+        <button class='btn btn-lg btn-primary' v-on:click="getDisponibilidad">Editar Disponibilidad</button>
+    </div>
+    <div class="col align-items-center" v-show="editing_disponibilidad">
+        <button class='btn btn-lg btn-primary' v-on:click="getMonitores">Cancelar</button>
+    </div>
   </div>
 </div>
 <script>
@@ -24,17 +32,23 @@
       data: {
         servicio: '',
         horario: '',
+        monitores: '',
         week_form: '',
-        week_form_loaded: false,
+        show_week_form: false,
+        show_monitores: false,
+        viewing_monitores: false,
+        editing_disponibilidad: false,
         week: ''
       },
       watch: {
         servicio: function(chosen_servicio) {
           this.getWeeks()
-          this.week_form_loaded = true
+          this.show_week_form = true
+          this.show_monitores = false
         },
         week: function(chosen_week) {
-          this.getDisponibilidad()
+          this.getMonitores()
+          this.show_monitores = true
         }
       },
       methods: {
@@ -50,6 +64,17 @@
           axios.get('http://localhost:3000/disponibles/disponibilidad/'+this.servicio+'/'+this.week)
             .then(function(response) {
               da.horario = response.data
+              da.viewing_monitores = false
+              da.editing_disponibilidad = true
+            })
+        },
+        getMonitores: function() {
+          var da = this
+          axios.get('http://localhost:3000/disponibles/monitores/'+this.servicio+'/'+this.week)
+            .then(function(response) {
+              da.horario = response.data
+              da.viewing_monitores = true
+              da.editing_disponibilidad = false
             })
         }
       }

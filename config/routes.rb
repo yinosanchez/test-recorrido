@@ -8,7 +8,6 @@ Rails.application.routes.draw do
   #horarios
   get '/horarios/weeks', to: 'horarios#weeks'
   get '/horarios/week_form/:chosen_week', to: 'horarios#week_form'
-  get '/horarios/monitores/:chosen_week', to: 'horarios#monitores'
   post '/horarios/update_week', to: 'horarios#update_week'
   post '/horarios/copy_past_week', to: 'horarios#copy_past_week'
 
@@ -17,4 +16,5 @@ Rails.application.routes.draw do
   get '/disponibles/week_form/:servicio_id', to: 'disponibles#week_form'
   get '/disponibles/disponibilidad/:servicio_id/:chosen_week', to: 'disponibles#disponibilidad'
   post '/disponibles/update_disponibilidad', to: 'disponibles#update_disponibilidad'
+  get '/disponibles/monitores/:servicio_id/:chosen_week', to: 'disponibles#monitores'
 end
