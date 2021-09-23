@@ -4,10 +4,11 @@
 
 Para hacer funcionar este test. Se recomienda partir por correr las migraciones y el seed.
 
-'''
+```
 rails db:migrate
 rails db:seed
-'''
+
+```
 
 Esto creara: 
 - El servicio con el mail: recorrido@recorrido.cl y la contraseña 'password'.
